@@ -6,12 +6,12 @@ export const loginbg_URl =
 export const user_AVATAR =
   "https://occ-0-4857-3662.1.nflxso.net/dnm/api/v6/SO2HoVCx33X8phZh2pZZmQ4QgNY/AAAABWQLL7bT3pYDF0xKXID9tpW4PldTqv3UQKdTRZkA2-RWg7H8sxekkU5LOjLBZLmHSe5GoOaOjjokJgKpeEQQ-rS5VZsHg9Q.png?r=e6e";
 
-  export const API_OPTIONS = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNjYzODA1NGQ1YzVmZjEzNmE5YjYzZDYzNzI2ZjE2ZiIsIm5iZiI6MTc5MDkwODc0MS4zNzYsInN1YiI6IjZhYmYxOTQ1ZTU3MTMwYWNjMDFkMmQ1OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2nkNTXt0HWHCWHpBvVS9za2KkwB9bi72184glDzjC8c",
-    },
-  };
-  
+export const API_OPTIONS = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNjYzODA1NGQ1YzVmZjEzNmE5YjYzZDYzNzI2ZjE2ZiIsIm5iZiI6MTc5MDkwODc0MS4zNzYsInN1YiI6IjZhYmYxOTQ1ZTU3MTMwYWNjMDFkMmQ1OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2nkNTXt0HWHCWHpBvVS9za2KkwB9bi72184glDzjC8c",
+  },
+};
+export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w780";
