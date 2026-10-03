@@ -1,32 +1,59 @@
-import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { removeUser, addUser } from "../utils/userSlice";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { logo_URL } from "../utils/constants";
+
 const Header = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
   const handleSignOut = () => {
     signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        navigate("/");
-      })
+      .then(() => {})
       .catch((error) => {
         // An error happened.
         navigate("/error");
       });
   };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, email, displayName, photoURL } = user;
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL,
+          }),
+        );
+        navigate("/browse");
+      } else {
+        dispatch(removeUser());
+        navigate("/");
+      }
+    });
+    // it will be unsubscribed when component unmounts
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <div className="absolute w-screen px-8 py-2  bg-gradient-to-b from-black z-10 flex justify-between">
-      <img
-        className="w-40"
-        src="https://occ.a.nflxso.net/dnmt/api/v6/iL4oJVDYZ8KLSrJ6eG2OwtghbfQ/AAAAAdEhm1UzVexHjKqFOP9W6E2UVtkWFvL-vdxIEbTU81rsqNuPmDDy_dQvmQ85ath49JBruVV4aGQA3gY2Dl5SiqFf-AEwPAZBTNkW8FMxGXpDN2mHrf8KlRRiddj1P422ZW1eZkZNWLTd.svg"
-        alt="logo"
-      />
+    <div className="absolute w-screen px-8 py-2  bg-gradient-to-b from-black z-40 flex justify-between ">
+      <img className="w-24 ml-6" src={logo_URL} alt="logo" />
       {user && (
-        <div className="flex p-2">
-          <img className="w-12 h-12 " alt="usericon" src={user?.photoURL} />
-          <button onClick={handleSignOut} className="font-bold text-white mt-3">
+        <div className="flex ">
+          <img
+            className="w-8 h-8 rounded-sm"
+            alt="usericon"
+            src={user?.photoURL}
+          />
+          <button
+            onClick={handleSignOut}
+            className="font-bold text-white mt-3 text-xs"
+          >
             (Sign Out)
           </button>
         </div>
