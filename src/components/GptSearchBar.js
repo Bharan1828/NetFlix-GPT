@@ -9,12 +9,14 @@ const GptSearchBar = () => {
   const langKey = useSelector((store) => store.config.lang);
   const searchText = useRef(null);
   const dispatch = useDispatch();
+
   useEffect(() => {
     return () => {
       dispatch(clearGptMovieResult());
     };
   }, [dispatch]);
-  //search movie in tmdb
+
+  // search movie in tmdb
   const searchMovieTMDB = async (movie) => {
     const data = await fetch(
       "https://api.themoviedb.org/3/search/movie?query=" +
@@ -22,9 +24,11 @@ const GptSearchBar = () => {
         "&include_adult=false&language=en-US&page=1",
       API_OPTIONS,
     );
+
     const json = await data.json();
     return json.results;
   };
+
   const handleGptSearchClick = async () => {
     console.log(searchText.current.value);
 
@@ -53,31 +57,90 @@ const GptSearchBar = () => {
         },
       ],
     });
+
     const gptMovies = gptResults.choices?.[0]?.message?.content.split(",");
+
     const promiseArray = gptMovies.map((movie) => searchMovieTMDB(movie));
     const tmdbResults = await Promise.all(promiseArray);
+
     console.log(tmdbResults);
 
     dispatch(
-      addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults }),
+      addGptMovieResult({
+        movieNames: gptMovies,
+        movieResults: tmdbResults,
+      }),
     );
   };
+
   return (
-    <div className="pt-[10%] flex justify-center">
+    <div className="pt-24 sm:pt-28 md:pt-[10%] flex justify-center px-3 sm:px-6">
       <form
-        className="w-1/2 bg-black/80 backdrop-blur-md border border-white/20 rounded-2xl p-2 flex items-center shadow-2xl focus-within:border-white/40 transition-all duration-300"
+        className="
+          w-full
+          sm:w-[85%]
+          md:w-3/4
+          lg:w-1/2
+          bg-black/80
+          backdrop-blur-md
+          border border-white/20
+          rounded-xl
+          sm:rounded-2xl
+          p-1.5
+          sm:p-2
+          flex
+          items-center
+          shadow-2xl
+          focus-within:border-white/40
+          transition-all
+          duration-300
+        "
         onSubmit={(e) => e.preventDefault()}
       >
         <input
           ref={searchText}
           type="text"
-          className="flex-1 bg-transparent text-white px-5 py-4 outline-none placeholder-gray-400 text-lg"
+          className="flex-1
+            min-w-0
+            bg-transparent
+            text-white
+            px-3
+            sm:px-4
+            md:px-5
+            py-3
+            sm:py-3.5
+            md:py-4
+            outline-none
+            placeholder-gray-400
+            text-sm
+            sm:text-base
+            md:text-lg
+          "
           placeholder={lang[langKey].gptSearchPlaceholder}
         />
 
         <button
           type="submit"
-          className="px-7 py-4 rounded-xl bg-white text-black font-semibold hover:bg-gray-200 transition-all duration-300 shadow-lg flex items-center gap-2"
+          className="
+            px-4
+            sm:px-5
+            md:px-7
+            py-3
+            sm:py-3.5
+            md:py-4
+            rounded-lg
+            sm:rounded-xl
+            bg-white
+            text-black
+            font-semibold
+            text-sm
+            sm:text-base
+            whitespace-nowrap
+            hover:bg-gray-200
+            transition-all
+            duration-300
+            shadow-lg
+          "
           onClick={handleGptSearchClick}
         >
           {lang[langKey].search}

@@ -49,13 +49,18 @@ const Header = () => {
   };
 
   return (
-    <div className="px-8 py-2  bg-gradient-to-b from-black flex justify-between w-full fixed top-0 left-0 z-50">
-      <img className="w-24 ml-6" src={logo_URL} alt="logo" />
+    <div className="px-3 sm:px-5 md:px-8 py-2 bg-gradient-to-b from-black flex justify-between items-center w-full fixed top-0 left-0 z-50">
+      <img
+        className="w-20 sm:w-24 md:w-28 ml-1 sm:ml-3 md:ml-6"
+        src={logo_URL}
+        alt="logo"
+      />
+
       {user && (
-        <div className="flex ">
+        <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
           {showGptSearch && (
             <select
-              className="px-3 py-2 mr-3 rounded-md bg-black/50 border border-gray-600 text-gray-300 text-sm outline-none cursor-pointer hover:border-gray-400 hover:text-white transition-all duration-300"
+              className="px-2 sm:px-3 py-2 rounded-md bg-black/50 border border-gray-600 text-gray-300 text-xs sm:text-sm outline-none cursor-pointer hover:border-gray-400 hover:text-white transition-all duration-300 max-w-[90px] sm:max-w-none"
               onChange={handleLanguageChange}
             >
               {SUPPORTED_LANGUAGES.map((lang) => (
@@ -69,20 +74,23 @@ const Header = () => {
               ))}
             </select>
           )}
+
           <button
-            className="px-5 py-2 mr-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-medium shadow-lg hover:bg-white/20 hover:border-white/40 transition-all duration-300 flex items-center gap-2 "
+            className="px-3 sm:px-4 md:px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs sm:text-sm md:text-base font-medium shadow-lg hover:bg-white/20 hover:border-white/40 transition-all duration-300 whitespace-nowrap"
             onClick={handleGptSearchClick}
           >
             {showGptSearch ? "HomePage" : "✨ GPT Search"}
           </button>
+
           <img
-            className="w-8 h-8 rounded-sm"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-sm"
             alt="usericon"
             src={user?.photoURL}
           />
+
           <button
             onClick={handleSignOut}
-            className="font-bold text-white mt-3 text-xs"
+            className="font-bold text-white text-[10px] sm:text-xs whitespace-nowrap"
           >
             (Sign Out)
           </button>

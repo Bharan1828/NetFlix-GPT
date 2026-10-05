@@ -85,56 +85,68 @@ const Login = () => {
     }
   };
   return (
-    <div>
-      <Header />
-      <div className="absolute">
-        <img src={loginbg_URl} alt="Bg" />
-      </div>
+    <div className="min-h-screen relative overflow-hidden">
+      {" "}
+      <Header /> {/* Background */}{" "}
+      <div className="fixed inset-0 -z-10">
+        {" "}
+        <img
+          src={loginbg_URl}
+          alt="Bg"
+          className="w-full h-full object-cover"
+        />{" "}
+      </div>{" "}
+      {/* Login / Signup Form */}{" "}
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="p-10 bg-black absolute w-3/12 mt-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-75"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%] xl:w-[30%] p-6 sm:p-8 md:p-10 bg-black/75 text-white rounded-lg"
       >
-        <h1 className="font-bold text-2xl py-4 px-2">
-          {isSignInForm ? "Sign In" : "Sign Up"}
-        </h1>
-
+        {" "}
+        <h1 className="font-bold text-2xl sm:text-3xl py-4 px-2">
+          {" "}
+          {isSignInForm ? "Sign In" : "Sign Up"}{" "}
+        </h1>{" "}
         {!isSignInForm && (
           <input
             ref={name}
             type="text"
             placeholder="Full Name"
-            className="p-4 my-3 w-full bg-gray-600 "
+            className="p-4 my-3 w-full bg-gray-600 rounded-md outline-none"
           />
-        )}
+        )}{" "}
         <input
           ref={email}
           type="text"
           placeholder="Email Address"
-          className="p-4 my-3 w-full bg-gray-600 "
-        />
-
+          className="p-4 my-3 w-full bg-gray-600 rounded-md outline-none"
+        />{" "}
         <input
           ref={password}
           type="password"
           placeholder="Password"
-          className="p-4 my-3 w-full bg-gray-600"
-        />
-        <p className="text-red-500 font-semibold text-lg py-2">{errMessage}</p>
+          className="p-4 my-3 w-full bg-gray-600 rounded-md outline-none"
+        />{" "}
+        <p className="text-red-500 font-semibold text-sm sm:text-base py-2">
+          {" "}
+          {errMessage}{" "}
+        </p>{" "}
         <button
-          className="p-4 my-4 bg-red-700 w-full rounded-lg "
+          className="p-4 my-4 bg-red-700 hover:bg-red-800 w-full rounded-lg font-semibold transition-colors"
           onClick={handleButtonClick}
         >
-          {isSignInForm ? "Sign In" : "Sign Up"}
-        </button>
+          {" "}
+          {isSignInForm ? "Sign In" : "Sign Up"}{" "}
+        </button>{" "}
         <p
-          className="text-gray-300 font-sans cursor-pointer"
+          className="text-gray-300 font-sans cursor-pointer text-sm sm:text-base"
           onClick={toggleSignInForm}
         >
+          {" "}
           {isSignInForm
             ? "New to Netflix? Sign Up Now"
-            : "Already Registered? Sign In Now"}
-        </p>
-      </form>
+            : "Already Registered? Sign In Now"}{" "}
+        </p>{" "}
+      </form>{" "}
     </div>
   );
 };
