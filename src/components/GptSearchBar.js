@@ -38,15 +38,23 @@ const GptSearchBar = () => {
       searchText.current.value +
       ". " +
       "Understand the user's requested language, genre, country, and other preferences from the query. " +
+      // Exact movie title search rule
+      "IMPORTANT: If the user's query contains or clearly refers to a specific movie title, treat it as a movie title search, NOT as a recommendation request. " +
+      "In that case, return ONLY that specific movie title and do not recommend any other movies. " +
+      "For example, if the user searches 'They Call Him OG', return ONLY 'They Call Him OG'. " +
+      "If the user searches 'OG', and 'OG' clearly refers to the movie 'They Call Him OG', return ONLY 'They Call Him OG'. " +
+      "Do not return 5 movies when the user is searching for a specific movie. " +
       "If the user explicitly requests Telugu movies, recommend ONLY movies originally made in the Telugu language. " +
       "Do NOT recommend English, Hindi, Tamil, Malayalam, Kannada, Korean, or other-language movies. " +
       "If the user requests a specific language or region, treat that requirement as mandatory. " +
-      "Recommend exactly 5 relevant movies released between 2004 and the present year. " +
-      "If the query contains a specific movie title, include that movie as the first recommendation when appropriate. " +
-      "Return ONLY the 5 movie titles separated by commas. " +
+      "For recommendation requests, recommend exactly 5 relevant movies released between 2004 and the present year. " +
+      "If the query is a recommendation request and contains a specific movie title, include that movie as the first recommendation when appropriate. " +
+      "Return ONLY the movie title or the 5 movie titles separated by commas. " +
       "Do not include numbering, bullet points, quotes, release years, explanations, or any extra text. " +
       "Use the official/common movie titles that are most likely to match TMDB search results. " +
-      "Example for 'best Telugu comedy movies': Jathi Ratnalu, Ee Nagaraniki Emaindi, Pelli Choopulu, Dookudu, F2: Fun and Frustration";
+      "Example for 'best Telugu comedy movies': Jathi Ratnalu, Ee Nagaraniki Emaindi, Pelli Choopulu, Dookudu, F2: Fun and Frustration. " +
+      "Example for 'They Call Him OG': They Call Him OG. " +
+      "Example for 'OG': They Call Him OG.";
 
     const gptResults = await groq.chat.completions.create({
       model: "openai/gpt-oss-120b",
