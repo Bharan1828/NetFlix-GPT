@@ -5,6 +5,8 @@
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "firebase": "^12.19.0",
+    "groq-sdk": "^1.6.0",
+    "openai": "^7.28.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-redux": "^9.3.0",

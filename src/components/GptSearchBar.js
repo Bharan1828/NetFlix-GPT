@@ -1,13 +1,75 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import lang from "../utils/languageConstants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import groq from "../utils/groq";
+import { API_OPTIONS } from "../utils/constants";
+import { addGptMovieResult, clearGptMovieResult } from "../utils/gptSlice";
 
 const GptSearchBar = () => {
   const langKey = useSelector((store) => store.config.lang);
+  const searchText = useRef(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    return () => {
+      dispatch(clearGptMovieResult());
+    };
+  }, [dispatch]);
+  //search movie in tmdb
+  const searchMovieTMDB = async (movie) => {
+    const data = await fetch(
+      "https://api.themoviedb.org/3/search/movie?query=" +
+        movie +
+        "&include_adult=false&language=en-US&page=1",
+      API_OPTIONS,
+    );
+    const json = await data.json();
+    return json.results;
+  };
+  const handleGptSearchClick = async () => {
+    console.log(searchText.current.value);
+
+    const gptQuery =
+      "Act as a professional movie recommendation system. " +
+      "The user's movie request is: " +
+      searchText.current.value +
+      ". " +
+      "Understand the user's requested language, genre, country, and other preferences from the query. " +
+      "If the user explicitly requests Telugu movies, recommend ONLY movies originally made in the Telugu language. " +
+      "Do NOT recommend English, Hindi, Tamil, Malayalam, Kannada, Korean, or other-language movies. " +
+      "If the user requests a specific language or region, treat that requirement as mandatory. " +
+      "Recommend exactly 5 relevant movies released between 2004 and the present year. " +
+      "If the query contains a specific movie title, include that movie as the first recommendation when appropriate. " +
+      "Return ONLY the 5 movie titles separated by commas. " +
+      "Do not include numbering, bullet points, quotes, release years, explanations, or any extra text. " +
+      "Use the official/common movie titles that are most likely to match TMDB search results. " +
+      "Example for 'best Telugu comedy movies': Jathi Ratnalu, Ee Nagaraniki Emaindi, Pelli Choopulu, Dookudu, F2: Fun and Frustration";
+
+    const gptResults = await groq.chat.completions.create({
+      model: "openai/gpt-oss-120b",
+      messages: [
+        {
+          role: "user",
+          content: gptQuery,
+        },
+      ],
+    });
+    const gptMovies = gptResults.choices?.[0]?.message?.content.split(",");
+    const promiseArray = gptMovies.map((movie) => searchMovieTMDB(movie));
+    const tmdbResults = await Promise.all(promiseArray);
+    console.log(tmdbResults);
+
+    dispatch(
+      addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults }),
+    );
+  };
   return (
     <div className="pt-[10%] flex justify-center">
-      <form className="w-1/2 bg-black/80 backdrop-blur-md border border-white/20 rounded-2xl p-2 flex items-center shadow-2xl focus-within:border-white/40 transition-all duration-300">
+      <form
+        className="w-1/2 bg-black/80 backdrop-blur-md border border-white/20 rounded-2xl p-2 flex items-center shadow-2xl focus-within:border-white/40 transition-all duration-300"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <input
+          ref={searchText}
           type="text"
           className="flex-1 bg-transparent text-white px-5 py-4 outline-none placeholder-gray-400 text-lg"
           placeholder={lang[langKey].gptSearchPlaceholder}
@@ -16,6 +78,7 @@ const GptSearchBar = () => {
         <button
           type="submit"
           className="px-7 py-4 rounded-xl bg-white text-black font-semibold hover:bg-gray-200 transition-all duration-300 shadow-lg flex items-center gap-2"
+          onClick={handleGptSearchClick}
         >
           {lang[langKey].search}
         </button>
